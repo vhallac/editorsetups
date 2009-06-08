@@ -1,0 +1,88 @@
+This is TeX, Version 3.141592 (MiKTeX 2.4) (preloaded format=texinfo 2005.10.27)  3 JAN 2006 10:58
+**nxml-mode.texi
+(nxml-mode.texi [Texinfo version 2005-03-21.17] (nxml-mode.aux)
+@cpindfile=@write3
+@fnindfile=@write4
+@vrindfile=@write5
+@tpindfile=@write6
+@kyindfile=@write7
+@pgindfile=@write8
+ (nXML Mode)
+Chapter 1 [1] [2] Chapter 2 [3] Chapter 3 [4] Chapter 4 [5] [6] Chapter 5
+[7] [8]
+Underfull \hbox (badness 6842) in paragraph at lines 570--580
+@textrm This says to use the schema `@texttt xhtml.rnc[]@textrm '[] for a doc-u
+-ment with names-pace
+
+@hbox(7.60416+2.12917)x433.62, glue set 4.09396
+.@textrm T
+.@textrm h
+.@textrm i
+.@textrm s
+.@glue 3.65 plus 1.825 minus 1.21666
+.etc.
+
+[9]
+Underfull \hbox (badness 10000) in paragraph at lines 643--651
+@textrm would trans-form the URI `@texttt file:///home/jjc/docs/spec.xml[]@text
+rm '[] into the URI
+
+@hbox(7.60416+2.43333)x433.62, glue set 5.10088
+.@textrm w
+.@kern-0.30418
+.@textrm o
+.@textrm u
+.@textrm l
+.etc.
+
+
+Overfull \hbox (55.38564pt too wide) in paragraph at lines 676--680
+@textrm specifies that when the names-pace URI of the doc-u-ment is `@texttt ht
+tp://www.w3.org/1999/XSL/Transform[]@textrm '[],|
+
+@hbox(7.60416+2.43333)x433.62, glue set - 1.0
+.@textrm s
+.@textrm p
+.@kern0.30417
+.@textrm e
+.@textrm c
+.etc.
+
+[10]
+Underfull \hbox (badness 4660) in paragraph at lines 711--718
+@textrm to be used), `@texttt XHTML Strict[]@textrm '[] and `@texttt XHTML Tran
+sitional[]@textrm '[]. Such a schema lo-
+
+@hbox(8.2125+2.73749)x433.62, glue set 3.60008
+.@textrm t
+.@textrm o
+.@glue 3.65 plus 1.825 minus 1.21666
+.@textrm b
+.@kern0.30417
+.etc.
+
+
+Underfull \hbox (badness 3492) in paragraph at lines 711--718
+@textrm cat-ing file would use `@texttt xhtml-strict.rnc[]@textrm '[] for a doc
+-u-ment whose names-pace is
+
+@hbox(7.60416+2.12917)x433.62, glue set 3.27171
+.@textrm c
+.@textrm a
+.@textrm t
+.@discretionary
+..@textrm -
+.@textrm i
+.etc.
+
+[11] Chapter 6 [12] Chapter 7 [13] [14] ) 
+Here is how much of TeX's memory you used:
+ 85 strings out of 96846
+ 1633 string characters out of 1207126
+ 35453 words of memory out of 1053354
+ 2352 multiletter control sequences out of 35000
+ 32127 words of font info for 112 fonts, out of 500000 for 1000
+ 51 hyphenation exceptions out of 607
+ 12i,7n,12p,211b,303s stack positions out of 1500i,500n,5000p,200000b,32768s
+
+Output written on nxml-mode.dvi (14 pages, 38496 bytes).

@@ -1,0 +1,15 @@
+@unnchapentry{nXML Mode}{10001}{Top}{1}
+@numchapentry{Completion}{1}{Completion}{2}
+@numchapentry{Inserting end-tags}{2}{Inserting end-tags}{4}
+@numchapentry{Paragraphs}{3}{Paragraphs}{5}
+@numchapentry{Outlining}{4}{Outlining}{6}
+@numchapentry{Locating a schema}{5}{Locating a schema}{8}
+@numsecentry{Commands for locating a schema}{5.1}{Commands for locating a schema}{8}
+@numsecentry{Schema locating files}{5.2}{Schema locating files}{9}
+@numsubsecentry{Schema locating file syntax basics}{5.2.1}{Schema locating file syntax basics}{9}
+@numsubsecentry{Using the document's URI to locate a schema}{5.2.2}{Using the document's URI to locate a schema}{9}
+@numsubsecentry{Using the document element to locate a schema}{5.2.3}{Using the document element to locate a schema}{10}
+@numsubsecentry{Using type identifiers in schema locating files}{5.2.4}{Using type identifiers in schema locating files}{10}
+@numsubsecentry{Using multiple schema locating files}{5.2.5}{Using multiple schema locating files}{11}
+@numchapentry{DTDs}{6}{DTDs}{13}
+@numchapentry{Limitations}{7}{Limitations}{14}

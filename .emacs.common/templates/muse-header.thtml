@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="<lisp>(muse-html-encoding)</lisp>"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title><lisp>(concat (car (muse-project))
+                       " - "
+                       (muse-wiki-publish-pretty-title))</lisp></title>
+    <meta name="generator" content="Muse" />
+    <meta http-equiv="<lisp>muse-html-meta-http-equiv</lisp>"
+          content="<lisp>muse-html-meta-content-type</lisp>" />
+    <lisp>
+      (let ((maintainer (muse-style-element :maintainer)))
+        (when maintainer
+          (concat \"<link rev=\\\"made\\\" href=\\\"\" maintainer \"\\\">\")))
+    </lisp>
+    <lisp>muse-html-style-sheet</lisp>
+  </head>
+  <body>
+
+    <lisp>(when (boundp 'emacs-wiki-menu-factory)
+            (funcall emacs-wiki-menu-factory))</lisp>
+    <div class="content">
+    <h1 id="top"><lisp>
+    (concat (muse-publishing-directive "title")
+          (let ((author (muse-publishing-directive "author")))
+            (if (not (string= author (user-full-name)))
+                (concat " (by " author ")"))))</lisp></h1>
+    <!-- Page published by Emacs Muse begins here -->

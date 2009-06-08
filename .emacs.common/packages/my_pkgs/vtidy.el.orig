@@ -1,0 +1,28 @@
+(provide 'vtidy)
+
+(defun vtidy-start-auto-trim ()
+  "Start auto trimming of whitespace at end of line."
+  (interactive "")
+  (setq vtidy-old-line 1)
+  (setq vtidy-current-line 1)
+  (make-variable-buffer-local 'vtidy-old-line)
+  (make-variable-buffer-local 'vtidy-current-line)
+  (make-local-hook 'post-command-hook)
+  (add-local-hook 'post-command-hook 'vtidy-trim-line-hook 't))
+
+(defun vtidy-trim-line-hook ()
+  "This function is a hook to post-command-hook which checks the end of all visited lines, and trims whitespace at the end."
+  (setq vtidy-current-line (line-number))
+  (if (/= vtidy-old-line vtidy-current-line)
+      (let ()
+        (vtidy-trim-line-end vtidy-old-line)
+        (setq vtidy-old-line vtidy-current-line))))
+
+(defun vtidy-trim-line-end (line)
+  "Remove spaces and tabs from the ned of line"
+  (let ((deactivate-mark nil))
+    (save-excursion
+      (save-match-data
+        (goto-line line)
+        (if (re-search-forward "\\s-+$" (point-at-eol) 't)
+            (replace-match "" 't nil))))))
