@@ -28,7 +28,7 @@ map Q gq
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
-if &t_Co > 2 || has("gui_running")
+if has("gui_running")
   syntax on
   set hlsearch
 endif
@@ -80,7 +80,6 @@ set tabstop=4
 behave xterm
 set selectmode=mouse
 set cindent
-syntax on
 set makeprg=nmake
 set errorformat=%f(%l)\ :\ %*[a-z]\ %t%n:\ %m
 set path=.,$INCPATH
@@ -108,8 +107,10 @@ set incsearch
 
 set cino=:0(0
 set tw=79
-winpos 0 0
-winsize 80 60
+if has("gui_running")
+    winpos 0 0
+    winsize 80 40
+endif
 source $VIMRUNTIME/colors/peachpuff.vim
 
 func ReverseEng()
