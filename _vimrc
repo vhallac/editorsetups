@@ -72,7 +72,7 @@ if has("autocmd")
  augroup END
 endif
 " And these are my commands
-set directory=$TEMP\\vim
+set directory=$TEMP/vim
 set shiftwidth=4
 set textwidth=74
 set smartcase
