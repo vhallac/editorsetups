@@ -122,4 +122,4 @@
 
 (GNUEmacs
  (GNULinux
-  normal-erase-is-backspace-mode))
+  (normal-erase-is-backspace-mode)))
