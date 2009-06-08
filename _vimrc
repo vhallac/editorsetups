@@ -110,7 +110,7 @@ set cino=:0(0
 set tw=79
 winpos 0 0
 winsize 80 60
-source $VIMRUNTIME\colors\peachpuff.vim
+source $VIMRUNTIME/colors/peachpuff.vim
 
 func ReverseEng()
     au! CursorHold *.[ch] nested call PreviewWord()
