@@ -14,6 +14,7 @@
  '(org-enforce-todo-checkbox-dependencies t)
  '(org-enforce-todo-dependencies t)
  '(org-global-properties (quote (("Effort_ALL" . "0:0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 8:00"))))
+ '(org-hide-leading-stars t)
  '(org-log-done (quote time))
  '(org-publish-project-alist (quote (("org-notes-static" :base-directory "~/org/notes" :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf" :publishing-directory "~/org-publish/" :recursive t :publishing-function org-publish-attachment) ("org-notes" :base-directory "~/org/notes" :base-extension "org" :publishing-directory "~/org-publish/") ("org-notes-all" :components ("org-notes" "org-notes-static")))))
  '(org-publish-use-timestamps-flag nil)
