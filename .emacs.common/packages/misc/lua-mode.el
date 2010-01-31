@@ -508,7 +508,7 @@ ignored, nil otherwise."
     ;; else is, to be shifted to the left.
     ;; This is the code we used to generate the regexp:
     (concat
-     "\\(\\<"
+     "\\(\\([:a-zA-Z]* *=\\)* *function\\|\\<"
      ; n.b. "local function" is a bit of a hack, allowing only a single space
      (regexp-opt '("do" "local function" "function" "repeat" "then") t)
      "\\>\\|"
@@ -787,12 +787,12 @@ and relative each, and the shift/column to indent to."
       (beginning-of-line)
       (while (lua-find-regexp 'forward lua-indentation-modifier-regexp
 			      search-stop)
-	(let ((found-token (match-string 0))
-	      (found-pos (match-beginning 0))
-	      (found-end (match-end 0))
-	      (data (match-data)))
-	  (setq indentation-info
-		(cons (lua-make-indentation-info-pair) indentation-info)))))
+        (let ((found-token (match-string 0))
+              (found-pos (match-beginning 0))
+              (found-end (match-end 0))
+              (data (match-data)))
+          (setq indentation-info
+                (cons (lua-make-indentation-info-pair) indentation-info)))))
     indentation-info))
 
 ;;}}}
