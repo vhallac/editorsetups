@@ -43,7 +43,7 @@
      (c-basic-offset . 4)
      (c-comment-only-line-offset . 0)
      (c-block-comment-prefix . "*")
-     (c-hanging-braces-alist     . ((substatement-open        after)
+     (c-hanging-braces-alist     . ((substatement-open        before after)
                                     (brace-list-open          after)
                                     (brace-list-intro)
                                     (brace-entry-open         before)
@@ -319,6 +319,8 @@ extern \"C\" statements are added."
      (if (> (length (device-frame-list)) 1)
          (delete-frame))))
 
+(define-key global-map [(f11)] '(lambda () (interactive "") (compile "make -k")))
+(define-key global-map [(f12)] '(lambda () (interactive "") (compile "git diff --check")))
 (define-key global-map [(f10)] 'next-error)
 
 (defun parent-prod-dir ()
