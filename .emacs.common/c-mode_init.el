@@ -71,9 +71,7 @@
                          (arglist-close         . c-lineup-arglist)
                          (inextern-lang         . -)
                          (statement-cont        . lineup-array-init)))
-     (c-cleanup-list . (brace-else-brace
-                        brace-elseif-brace
-                        empty-defun-braces
+     (c-cleanup-list . (empty-defun-braces
                         list-close-comma
                         scope-operator
                         one-liner-defun
