@@ -69,6 +69,3 @@
 (load "~/.emacs.common/config.el")
 
 (server-start)
-
-(if (eq system-type 'windows-nt)
-    (run-with-timer 0 1 (lambda nil (setq gnuserv-frame (selected-frame)))))
