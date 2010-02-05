@@ -69,3 +69,5 @@
 (load "~/.emacs.common/config.el")
 
 (server-start)
+
+(set-default-coding-systems 'utf-8)
