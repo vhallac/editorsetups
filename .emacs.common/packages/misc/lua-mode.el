@@ -365,13 +365,13 @@ to `lua-mode-map', otherwise they are prefixed with `lua-prefix-key'."
   (define-key lua-mode-map "}" 'lua-electric-match)
   (define-key lua-mode-map "]" 'lua-electric-match)
   (define-key lua-mode-map ")" 'lua-electric-match)
+  (define-key lua-mode-map (key "C-M-a") 'lua-beginning-of-proc)
+  (define-key lua-mode-map (key "C-M-e") 'lua-end-of-proc)
   (let ((map (if lua-prefix-key
                                           (make-sparse-keymap)
                                         lua-mode-map)))
 
          ;; communication
-         (define-key map "\M-[" 'lua-beginning-of-proc)
-         (define-key map "\M-]" 'lua-end-of-proc)
          (define-key map "\C-c" 'comment-region)
 	 (define-key map "\C-l" 'lua-send-buffer)
 	 (define-key map "\C-f" 'lua-search-documentation)
