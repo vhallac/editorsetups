@@ -365,8 +365,8 @@ to `lua-mode-map', otherwise they are prefixed with `lua-prefix-key'."
   (define-key lua-mode-map "}" 'lua-electric-match)
   (define-key lua-mode-map "]" 'lua-electric-match)
   (define-key lua-mode-map ")" 'lua-electric-match)
-  (define-key lua-mode-map (key "C-M-a") 'lua-beginning-of-proc)
-  (define-key lua-mode-map (key "C-M-e") 'lua-end-of-proc)
+  (define-key lua-mode-map (kbd "C-M-a") 'lua-beginning-of-proc)
+  (define-key lua-mode-map (kbd "C-M-e") 'lua-end-of-proc)
   (let ((map (if lua-prefix-key
                                           (make-sparse-keymap)
                                         lua-mode-map)))
