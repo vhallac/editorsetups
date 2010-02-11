@@ -1,14 +1,14 @@
 ; The few macros below make it easier to code up version dependent stuff
 (defmacro GNUEmacs (&rest x)
-  (list 'if (string-match "GNU Emacs" (prin1-to-string (version))) (cons 'progn x))) 
+  (list 'if (string-match "GNU Emacs" (prin1-to-string (version))) (cons 'progn x)))
 (defmacro GNUEmacs20 (&rest x)
-  (list 'if (string-match "GNU Emacs 20" (prin1-to-string (version))) (cons 'progn x))) 
+  (list 'if (string-match "GNU Emacs 20" (prin1-to-string (version))) (cons 'progn x)))
 (defmacro GNUEmacs21 (&rest x)
-  (list 'if (string-match "GNU Emacs 21" (prin1-to-string (version))) (cons 'progn x))) 
+  (list 'if (string-match "GNU Emacs 21" (prin1-to-string (version))) (cons 'progn x)))
 (defmacro XEmacs (&rest x)
-  (list 'if (string-match "XEmacs 21" (prin1-to-string (version))) (cons 'progn x))) 
+  (list 'if (string-match "XEmacs 21" (prin1-to-string (version))) (cons 'progn x)))
 (defmacro GNULinux (&rest x)
-  (list 'if (string-match "linux" (prin1-to-string system-type)) (cons 'progn x))) 
+  (list 'if (string-match "linux" (prin1-to-string system-type)) (cons 'progn x)))
 (defmacro Windows (&rest x)
   (list 'if (string-match "windows" (prin1-to-string system-type)) (cons 'progn x)))
 
@@ -37,6 +37,7 @@
    (visit-tags-table FILE t)))
 
 ; Default frame position
+
 (XEmacs
  (set-frame-position nil 0 0)
  (set-frame-height nil 58))
@@ -54,7 +55,7 @@
          (dirs nil))
     (while toplevel
       (let ((file (car toplevel)))
-        (unless (member 
+        (unless (member
                  (file-name-nondirectory file)
                  '("." ".." "cvs" "CVS" "rcs" "RCS" ".svn" "emacs" "xemacs"))
           (if (file-directory-p file)
@@ -134,7 +135,7 @@
  (setq transient-mark-mode t)
  (menu-bar-mode -1)
  (tool-bar-mode -1)
- 
+
  ;; no splash screen:
  (setq inhibit-startup-message t)
  (setq inhibit-splash-screen t)
