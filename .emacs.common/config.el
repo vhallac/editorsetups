@@ -37,18 +37,19 @@
    (visit-tags-table FILE t)))
 
 ; Default frame position
-
-(XEmacs
- (set-frame-position nil 0 0)
- (set-frame-height nil 58))
-(GNUEmacs
- (Windows
-  (setq initial-frame-alist (append '((top . 20) (left . 1))
-                                    (if (>= (x-display-pixel-height) 1024)
-                                        (list (cons 'height 55))))))
-(GNULinux
-  (if (>= (x-display-pixel-height) 1024)
-      (setq initial-frame-alist '((height . 55))))))
+(if window-system
+    (progn 
+      (XEmacs
+       (set-frame-position nil 0 0)
+       (set-frame-height nil 58))
+      (GNUEmacs
+       (Windows
+        (setq initial-frame-alist (append '((top . 20) (left . 1))
+                                          (if (>= (x-display-pixel-height) 1024)
+                                              (list (cons 'height 55))))))
+       (GNULinux
+        (if (>= (x-display-pixel-height) 1024)
+            (setq initial-frame-alist '((height . 55))))))))
 
 (defun recursive-directory-list (path)
   (let* ((toplevel (directory-files path t))
