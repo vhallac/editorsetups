@@ -126,3 +126,18 @@
 
 (Windows
  (setq tramp-default-method "plink"))
+
+; Experimental setup extras
+(GNUEmacs
+ (scroll-bar-mode -1)
+ (blink-cursor-mode -1)
+ (setq transient-mark-mode t)
+ (menu-bar-mode -1)
+ (tool-bar-mode -1)
+ 
+ ;; no splash screen:
+ (setq inhibit-startup-message t)
+ (setq inhibit-splash-screen t)
+
+ ;; Interactively do things
+ (ido-mode t))
