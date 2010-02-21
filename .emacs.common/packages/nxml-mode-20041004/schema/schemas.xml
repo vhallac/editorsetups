@@ -28,9 +28,13 @@
   
   <documentElement localName="locatingRules" uri="locate.rnc"/>
 
+  <documentElement prefix="" localName="Ui" typeId="wowui"/>
+
   <typeId id="XSLT" uri="xslt.rnc"/>
   <typeId id="RELAX NG" uri="relaxng.rnc"/>
   <typeId id="XHTML" uri="xhtml.rnc"/>
   <typeId id="DocBook" uri="docbook.rnc"/>
   <typeId id="RDF" uri="rdfxml.rnc"/>
+  <typeId id="wowui" uri="wowui.rnc"/>
+
 </locatingRules>
