@@ -124,7 +124,8 @@
 
 (GNUEmacs
  (GNULinux
-  (normal-erase-is-backspace-mode 1)))
+  (if window-system
+   (normal-erase-is-backspace-mode 1))))
 
 (Windows
  (setq tramp-default-method "plink"))
