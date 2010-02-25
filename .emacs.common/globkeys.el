@@ -13,7 +13,18 @@
 (define-key global-map [(f9)] '(lambda () "Choose buffer"
                                  (interactive "")
                                  (electric-buffer-list)))
-(define-key global-map [(control /)] 'match-parenthesis)
+(define-key global-map (kbd "M-]") 'match-parenthesis)
+
+; For console:
+; Will add to this list as I encounter more mismatches
+(if window-system
+    ; Alias C-/ in window mode to C-_
+    (progn
+      (define-key key-translation-map (kbd "C-/") (kbd "C-_")))
+  ; Fixup missing console keys
+  (define-key key-translation-map (kbd "M-[ 1 ^") (kbd "C-<home>"))
+  (define-key key-translation-map (kbd "<select>") (kbd "<end>"))
+  (define-key key-translation-map (kbd "M-[ 4 ^") (kbd "C-<end>")))
 
 ; The helper functions for the global key bindings
 
