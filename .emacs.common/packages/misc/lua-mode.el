@@ -137,7 +137,7 @@ Should be a list of strings."
 
 (defvar lua-electric-flag t
 "If t, electric actions (like automatic reindentation)  will happen when an electric
- key like `{' is pressed") 
+ key like `{' is pressed")
 (make-variable-buffer-local 'lua-electric-flag)
 
 (defcustom lua-prefix-key "\C-c"
@@ -206,7 +206,7 @@ traceback location."
      ;; Function name declarations.
      '("^[ \t]*\\<\\(\\(local[ \t]+\\)?function\\)\\>[ \t]+\\(\\(\\sw:\\|\\sw\\.\\|\\sw_\\|\\sw\\)+\\)"
        (1 font-lock-keyword-face) (3 font-lock-function-name-face nil t))
-     
+
      ;; Handle function names in assignments
      '("\\(\\(\\sw:\\|\\sw\\.\\|\\sw_\\|\\sw\\)+\\)[ \t]*=[ \t]*\\(function\\)\\>"
        (1 font-lock-function-name-face nil t) (3 font-lock-keyword-face))
@@ -216,9 +216,8 @@ traceback location."
      ; this works best with lazy-lock-mode if your Emacs supports it, e.g.
      ; try (setq font-lock-support-mode 'lazy-lock-mode) in your ~/.emacs
 
-     ;; Multi-line comment blocks.
-     `("\\(?:^\\|[^-]\\)\\(--\\[\\(=*\\)\\[\\(?:.\\|\n\\)*?\\]\\2\\]\\)"
-       (1 font-lock-comment-face t))
+     ;; Comments or strings: Handle from a function
+     `(lua-match-comment-or-string)
 
      ;;
      ;; Keywords.
@@ -283,51 +282,40 @@ traceback location."
 ;;{{{ lua-mode
 
 ;;;###autoload
-(defun lua-mode ()
+(define-derived-mode lua-mode fundamental-mode "Lua"
   "Major mode for editing Lua code.
 The following keys are bound:
 \\{lua-mode-map}
 "
-  (interactive)
   (let ((switches nil)
                   s)
-    (kill-all-local-variables)
-    (setq major-mode 'lua-mode)
-    (setq mode-name "Lua")
     (setq comint-prompt-regexp lua-prompt-regexp)
     (make-local-variable 'lua-default-command-switches)
     (set (make-local-variable 'indent-line-function) 'lua-indent-line)
     (set (make-local-variable 'comment-start) "--")
     (set (make-local-variable 'comment-start-skip) "--")
     (set (make-local-variable 'font-lock-defaults)
-                        '(lua-font-lock-keywords nil nil ((?_ . "w"))))
+         '(lua-font-lock-keywords
+           t
+           nil
+           ((?_ . "w")
+            ("+*/^<>=~" . ".")
+            (?- . ". 12")
+            (?\n . ">")
+            ("\'\"" . "\"")
+            ;; This might be better as punctuation, as
+            ;; for C, but this way you can treat table
+            ;; index as symbol.
+            (?. . "_")) ; e.g. `io.string'
+           ))
     (set (make-local-variable 'imenu-generic-expression)
                         lua-imenu-generic-expression)
-         (setq local-abbrev-table lua-mode-abbrev-table)
-         (abbrev-mode 1)
+    (setq local-abbrev-table lua-mode-abbrev-table)
+    (abbrev-mode 1)
     (make-local-variable 'lua-default-eval)
     (or lua-mode-map
-                  (lua-setup-keymap))
+        (lua-setup-keymap))
     (use-local-map lua-mode-map)
-    (set-syntax-table (copy-syntax-table))
-    (modify-syntax-entry ?+ ".")
-    (modify-syntax-entry ?- ". 12")
-    (modify-syntax-entry ?* ".")
-    (modify-syntax-entry ?/ ".")
-    (modify-syntax-entry ?^ ".")
-    ;; This might be better as punctuation, as for C, but this way you
-    ;; can treat table index as symbol.
-    (modify-syntax-entry ?. "_")	; e.g. `io.string'
-    (modify-syntax-entry ?> ".")
-    (modify-syntax-entry ?< ".")
-    (modify-syntax-entry ?= ".")
-    (modify-syntax-entry ?~ ".")
-    (modify-syntax-entry ?\n ">")
-    (modify-syntax-entry ?\' "\"")
-    (modify-syntax-entry ?\" "\"")
-    ;; _ needs to be part of a word, or the regular expressions will
-    ;; incorrectly regognize end_ to be matched by "\\<end\\>"!
-    (modify-syntax-entry ?_ "w")
     (if (and lua-using-xemacs
 	     (featurep 'menubar)
 	     current-menubar
@@ -343,7 +331,7 @@ The following keys are bound:
     ;; hideshow setup
     (unless (assq 'lua-mode hs-special-modes-alist)
       (add-to-list 'hs-special-modes-alist
-		   `(lua-mode  
+		   `(lua-mode
 		     ,(regexp-opt (mapcar 'car lua-sexp-alist) 'words);start
 		     ,(regexp-opt (mapcar 'cdr lua-sexp-alist) 'words) ;end
 		     nil lua-forward-sexp)))
@@ -386,7 +374,7 @@ to `lua-mode-map', otherwise they are prefixed with `lua-prefix-key'."
   "Insert character and adjust indentation."
   (interactive "P")
   (insert-char last-command-char (prefix-numeric-value arg))
-  (if lua-electric-flag 
+  (if lua-electric-flag
       (lua-indent-line))
   (blink-matching-open))
 
@@ -398,19 +386,22 @@ to `lua-mode-map', otherwise they are prefixed with `lua-prefix-key'."
   (parse-partial-sexp (save-excursion (beginning-of-line) (point))
 		      (point)))
 
-
 (defun lua-string-p ()
   "Returns true if the point is in a string."
-  (elt (lua-syntax-status) 3))
+  (or (get-text-property (point) 'in-string)
+      (elt (lua-syntax-status) 3)))
 
 (defun lua-comment-p ()
   "Returns true if the point is in a comment."
-    (elt (lua-syntax-status) 4))
+  (or (get-text-property (point) 'in-comment)
+      (elt (lua-syntax-status) 4)))
 
 (defun lua-comment-or-string-p ()
   "Returns true if the point is in a comment or string."
-  (let ((parse-result (lua-syntax-status)))
-    (or (elt parse-result 3) (elt parse-result 4))))
+  (or (get-text-property (point) 'in-string)
+      (get-text-property (point) 'in-comment)
+      (let ((parse-result (lua-syntax-status)))
+        (or (elt parse-result 3) (elt parse-result 4)))))
 
 ;;}}}
 ;;{{{ lua-indent-line
@@ -420,9 +411,9 @@ to `lua-mode-map', otherwise they are prefixed with `lua-prefix-key'."
 Return the amount the indentation changed by."
   (let ((indent (max 0 (- (lua-calculate-indentation nil)
 			  (lua-calculate-indentation-left-shift))))
-	beg shift-amt
-	(case-fold-search nil)
-	(pos (- (point-max) (point))))
+        beg shift-amt
+        (case-fold-search nil)
+        (pos (- (point-max) (point))))
     (beginning-of-line)
     (setq beg (point))
     (skip-chars-forward lua-indent-whitespace)
@@ -553,7 +544,7 @@ ignored, nil otherwise."
 	      (throw 'found nil)))))))
 
 ;;}}}
-;;{{{ lua-goto-matching-block-token 
+;;{{{ lua-goto-matching-block-token
 
 (defun lua-goto-matching-block-token (&optional search-start parse-start)
   "Find block begion/end token matching the one at the point.
@@ -738,7 +729,7 @@ use standalone."
 			    lua-indent-level)))
 	((or (string-equal found-token "{")
          (string-equal found-token "("))
-	 (save-excursion 
+	 (save-excursion
 	   ;; expression follows -> indent at start of next expression
 	   (if (and (not (search-forward-regexp "[[:space:]]--" (line-end-position) t))
 		    (search-forward-regexp "[^[:space:]]" (line-end-position) t))
@@ -830,7 +821,7 @@ one."
     (if (eq (car indentation-info) 'absolute)
 	(- (cdr indentation-info)
 	   (current-indentation)
-	   ;; reduce indentation if this line also starts new continued statement 
+	   ;; reduce indentation if this line also starts new continued statement
 	   ;; or next line cont. this line
 	   ;;This is for aesthetic reasons: the indentation should be
 	   ;;dosomething(d +
@@ -883,7 +874,7 @@ one."
   (+ lua-left-shift-pos-2
      (regexp-opt-depth lua-left-shift-regexp-2)))
 
-;;}}} 
+;;}}}
 ;;{{{ lua-calculate-indentation-left-shift
 
 (defun lua-calculate-indentation-left-shift (&optional parse-start)
@@ -1085,23 +1076,23 @@ If `lua-process' is nil or dead, start a new process first."
 	     (comint-check-proc lua-process-buffer))
 	(lua-start-process lua-default-application))
     ;; kill lua process without query
-    (if (fboundp 'process-kill-without-query) 
-	(process-kill-without-query lua-process)) 
+    (if (fboundp 'process-kill-without-query)
+	(process-kill-without-query lua-process))
     ;; send dofile(tempfile)
-    (with-current-buffer lua-process-buffer   
+    (with-current-buffer lua-process-buffer
       (goto-char (point-max))
       (setq last-prompt (point-max))
-      (comint-simple-send (get-buffer-process (current-buffer)) 
-			  (format "dofile(\"%s\")"  
+      (comint-simple-send (get-buffer-process (current-buffer))
+			  (format "dofile(\"%s\")"
 				  (replace-in-string tempfile "\\\\" "\\\\\\\\" )))
       ;; wait for prompt
-      (while (not prompt-found) 
+      (while (not prompt-found)
 	(accept-process-output (get-buffer-process (current-buffer)))
 	(goto-char (point-max))
 	(setq prompt-found (and (lua-prompt-line) (< last-prompt (point-max)))))
     ;; remove temp. lua file
     (delete-file tempfile)
-    (lua-postprocess-output-buffer lua-process-buffer last-prompt lua-stdin-line-offset)    
+    (lua-postprocess-output-buffer lua-process-buffer last-prompt lua-stdin-line-offset)
     (if lua-always-show
 	(display-buffer lua-process-buffer)))))
 
@@ -1126,7 +1117,7 @@ t, otherwise return nil.  BUF must exist."
       (lua-jump-to-traceback file line lua-stdin-line-offset)
       (setq err-p t))
     err-p))
-  
+
 ;;}}}
 ;;{{{ lua-jump-to-tracebackw
 
@@ -1144,14 +1135,14 @@ t, otherwise return nil.  BUF must exist."
       (if (not (eq major-mode 'lua-mode))
 	  (lua-mode))
       ;; TODO fix offset when executing region
-      (goto-line line)			
+      (goto-line line)
       (message "Jumping to error in file %s on line %d" file line))))
 
 ;;}}}
 ;;{{{ lua-prompt-line
 
 (defun lua-prompt-line ()
-  (save-excursion 
+  (save-excursion
     (save-match-data
       (forward-line 0)
       (if (looking-at comint-prompt-regexp)
@@ -1277,7 +1268,7 @@ left out."
    (while (> count 0)
      ;; skip whitespace
      (skip-chars-forward " \t\n")
-     (if (looking-at (regexp-opt block-start 'words)) 
+     (if (looking-at (regexp-opt block-start 'words))
 	 (let ((keyword (match-string 1)))
 	   (lua-find-matching-token-word keyword nil))
        ;; If the current keyword is not a "begin" keyword, then just
@@ -1321,6 +1312,25 @@ left out."
   '("Send Buffer" . lua-send-buffer))
 (define-key lua-mode-menu [search-documentation]
   '("Search Documentation" . lua-search-documentation))
+
+;;}}}
+
+;;{{{ syntax helper: handle comments and strings
+
+(defun lua-match-comment-or-string (limit)
+  (if (re-search-forward "\\(?:\\(?:^\\|[^-]\\)\\(--\\[\\(=*\\)\\[\\(?:.\\|\n\\)*?\\]\\2\\]\\)\\)\\|\\(--.*?\n\\)\\|\\(\\([\'\"]\\).*?\\5\\)" limit t)
+      (cond
+       ( (or (match-beginning 1)
+             (match-beginning 3))       ; Comments
+         (add-text-properties (match-beginning 0) (match-end 0)
+                              `(face font-lock-comment-face
+                                     font-lock-multiline t
+                                     in-comment t)))
+       ( (match-beginning 4)            ; Strings
+         (add-text-properties (match-beginning 0) (match-end 0)
+                              `(face font-lock-string-face
+                                     font-lock-multiline t
+                                     in-string t))))))
 
 ;;}}}
 
