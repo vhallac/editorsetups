@@ -217,7 +217,10 @@ traceback location."
      ; try (setq font-lock-support-mode 'lazy-lock-mode) in your ~/.emacs
 
      ;; Comments or strings: Handle from a function
-     `(lua-match-comment-or-string)
+     `(lua-match-comment-or-string
+       (1 font-lock-comment-face t t)
+       (3 font-lock-comment-face t t)
+       (4 font-lock-string-face t t))
 
      ;;
      ;; Keywords.
@@ -299,10 +302,18 @@ The following keys are bound:
            t
            nil
            ((?_ . "w")
-            ("+*/^<>=~" . ".")
+            (?+ . ".")
+            (?* . ".")
+            (?/ . ".")
+            (?^ . ".")
+            (?< . ".")
+            (?> . ".")
+            (?= . ".")
+            (?~ . ".")
             (?- . ". 12")
             (?\n . ">")
-            ("\'\"" . "\"")
+            (?' . "\"")
+            (?" . "\"")
             ;; This might be better as punctuation, as
             ;; for C, but this way you can treat table
             ;; index as symbol.

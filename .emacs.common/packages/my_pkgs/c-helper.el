@@ -6,7 +6,7 @@
 (setq c-helper-buffer-specific-dir-hook nil)
 
 ; Emacs compatibility functions
-(if (not xemacsp)
+(GNUEmacs
     (progn
       (if (not (functionp 'buffer-tag-table-files))
           (defun buffer-tag-table-files ()

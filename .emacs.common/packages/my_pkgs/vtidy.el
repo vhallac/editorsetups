@@ -1,12 +1,12 @@
 (provide 'vtidy)
 
 ; Make it work under emacs, too. :-)
-(if (not xemacsp)
-    (progn
-      (if (not (functionp 'add-local-hook))
-          (defun add-local-hook (HOOK FN APPEND) (add-hook HOOK FN APPEND t)))
-      (if (not (functionp 'remove-local-hook))
-          (defun remove-local-hook (HOOK FN) (remove-hook HOOK FN t)))))
+(GNUEmacs
+ (progn
+   (if (not (functionp 'add-local-hook))
+       (defun add-local-hook (HOOK FN APPEND) (add-hook HOOK FN APPEND t)))
+   (if (not (functionp 'remove-local-hook))
+       (defun remove-local-hook (HOOK FN) (remove-hook HOOK FN t)))))
 
 (setq vtidy-old-line 1)
 (make-variable-buffer-local 'vtidy-old-line)
