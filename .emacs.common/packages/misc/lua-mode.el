@@ -29,7 +29,7 @@
 ;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 ;; MA 02110-1301, USA.
 
-(defconst lua-version "20071122"
+(defconst lua-version "20100302"
   "Lua Mode version number.")
 
 ;; Keywords: languages, processes, tools
