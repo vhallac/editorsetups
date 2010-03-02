@@ -220,7 +220,8 @@ traceback location."
      `(lua-match-comment-or-string
        (1 font-lock-comment-face t t)
        (3 font-lock-comment-face t t)
-       (4 font-lock-string-face t t))
+       (4 font-lock-string-face t t)
+       (6 font-lock-string-face t t))
 
      ;;
      ;; Keywords.
@@ -1329,7 +1330,7 @@ left out."
 ;;{{{ syntax helper: handle comments and strings
 
 (defun lua-match-comment-or-string (limit)
-  (if (re-search-forward "\\(?:\\(?:^\\|[^-]\\)\\(--\\[\\(=*\\)\\[\\(?:.\\|\n\\)*?\\]\\2\\]\\)\\)\\|\\(--.*?\n\\)\\|\\(\\([\'\"]\\).*?\\5\\)" limit t)
+  (if (re-search-forward "\\(?:\\(?:^\\|[^-]\\)\\(--\\[\\(=*\\)\\[\\(?:.\\|\n\\)*?\\]\\2\\]\\)\\)\\|\\(--.*?\n\\)\\|\\(\\([\'\"]\\).*?\\5\\)\\|\\(\\[\\(=*\\)\\[\\(?:.\\|\n\\)*?\\]\\7\\]\\)" limit t)
       (cond
        ( (or (match-beginning 1)
              (match-beginning 3))       ; Comments
@@ -1337,7 +1338,8 @@ left out."
                               `(face font-lock-comment-face
                                      font-lock-multiline t
                                      in-comment t)))
-       ( (match-beginning 4)            ; Strings
+       ( (or (match-beginning 4) 
+             (match-beginning 6))       ; Strings
          (add-text-properties (match-beginning 0) (match-end 0)
                               `(face font-lock-string-face
                                      font-lock-multiline t
