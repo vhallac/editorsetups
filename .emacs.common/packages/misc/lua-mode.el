@@ -1330,6 +1330,7 @@ left out."
 ;;{{{ syntax helper: handle comments and strings
 
 (defun lua-match-comment-or-string (limit)
+  (remove-text-properties (point) limit `(font-lock-multiline in-comment in-string))
   (if (re-search-forward "\\(?:\\(?:^\\|[^-]\\)\\(--\\[\\(=*\\)\\[\\(?:.\\|\n\\)*?\\]\\2\\]\\)\\)\\|\\(--.*?\n\\)\\|\\(\\([\'\"]\\).*?\\5\\)\\|\\(\\[\\(=*\\)\\[\\(?:.\\|\n\\)*?\\]\\7\\]\\)" limit t)
       (cond
        ( (or (match-beginning 1)
