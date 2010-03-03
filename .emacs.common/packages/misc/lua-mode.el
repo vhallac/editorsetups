@@ -219,9 +219,9 @@ traceback location."
      ;; Comments or strings: Handle from a function
      `(lua-match-comment-or-string
        (1 font-lock-comment-face t t)
-       (3 font-lock-comment-face t t)
-       (4 font-lock-string-face t t)
-       (6 font-lock-string-face t t))
+       (2 font-lock-string-face t t)
+       (5 font-lock-comment-face t t)
+       (7 font-lock-string-face t t))
 
      ;;
      ;; Keywords.
@@ -1331,22 +1331,42 @@ left out."
 
 (defun lua-match-comment-or-string (limit)
   (remove-text-properties (point) limit `(font-lock-multiline in-comment in-string))
-  (if (re-search-forward "\\(?:\\(?:^\\|[^-]\\)\\(--\\[\\(=*\\)\\[\\(?:.\\|\n\\)*?\\]\\2\\]\\)\\)\\|\\(--.*?\n\\)\\|\\(\\([\'\"]\\).*?\\5\\)\\|\\(\\[\\(=*\\)\\[\\(?:.\\|\n\\)*?\\]\\7\\]\\)" limit t)
-      (cond
-       ( (or (match-beginning 1)
-             (match-beginning 3))       ; Comments
-         (add-text-properties (match-beginning 0) (match-end 0)
-                              `(face font-lock-comment-face
-                                     font-lock-multiline t
-                                     in-comment t)))
-       ( (or (match-beginning 4) 
-             (match-beginning 6))       ; Strings
-         (add-text-properties (match-beginning 0) (match-end 0)
-                              `(face font-lock-string-face
-                                     font-lock-multiline t
-                                     in-string t))))))
+  (when (re-search-forward 
+         (concat"\\(?:\\(?:^\\|[^-]\\)\\(\\(?:--\\)?\\(\\[\\(=*\\)\\[\\(\\(?:.\\|\n\\)*?\\)\\]\\3\\]\\)\\)\\)" ;multi-line string or comment: 1: comment, 2: string, 4: body
+                "\\|"
+                "\\(--\\(.*?\\)$\\)"    ; single-line comment. 5: comment, 6: body
+                "\\|"
+                "\\(\\([\'\"]\\)\\(.*?\\)\\(?:\\8\\|$\\)\\)") ; string: 7: string, 9: body
+         limit t)
+    
+    (let ((data (match-data)))
+      ;; Get rid of either 1 or 2 in match-data
+      (if (and (match-beginning 1)
+               (/= (match-beginning 1) (match-beginning 2)))
+          (progn
+            (setf (nth 4 data) nil)
+            (setf (nth 5 data) nil))
+        (setf (nth 2 data) nil)
+        (setf (nth 3 data) nil))
+      (set-match-data data))
 
-;;}}}
+    (cond
+     ( (match-beginning 1)
+       (add-text-properties (match-beginning 4) (match-end 4)
+                            (list 'font-lock-multiline t
+                                  'in-comment t)))
+     ( (match-beginning 2)
+       (add-text-properties (match-beginning 4) (match-end 4)
+                            (list 'font-lock-multiline t
+                                  'in-string t)))
+     ( (match-beginning 5)
+       (add-text-properties (match-beginning 6) (match-end 6)
+                            (list 'in-comment t)))
+     ( (match-beginning 7)
+       (add-text-properties (match-beginning 9) (match-end 9)
+                            (list 'in-string t))))))
+  
+  ;;}}}
 
 (provide 'lua-mode)
 
