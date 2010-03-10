@@ -855,7 +855,8 @@ The effect of each token can be either a shift relative to the current
 indentation level, or indentation to some absolute column. This information
 is collected in a list of indentation info pairs, which denote absolute
 and relative each, and the shift/column to indent to."
-  (let ((combined-line-end (line-end-position)))
+  (let ((combined-line-end (line-end-position))
+        (start-indentation (current-indentation)))
     (save-excursion
       (while (lua-last-token-continues-p)
         (lua-goto-nonblank-next-line)
@@ -877,7 +878,7 @@ and relative each, and the shift/column to indent to."
                   (cons (lua-make-indentation-info-pair) indentation-info))))
 
         (or (and indentation-info (lua-cleanup-indentation-info indentation-info))
-            (list (cons 'absolute (current-indentation))))))))
+            (list (cons 'absolute start-indentation)))))))
 
 ;;}}}
 ;;{{{ lua-accumulate-indentation-info
