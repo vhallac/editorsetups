@@ -456,8 +456,10 @@ ignored, nil otherwise."
 	(case-fold-search nil))
     (catch 'found
       (while (funcall search-func regexp limit t)
-	(if (not (funcall ignore-func))
-	    (throw 'found (point)))))))
+        (save-excursion
+          (goto-char (match-beginning 0))
+          (when (not (funcall ignore-func))
+            (throw 'found (point))))))))
 
 ;;}}}
 ;;{{{ lua-backwards-to-block-begin-or-end
