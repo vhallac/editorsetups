@@ -1422,10 +1422,12 @@ left out."
        ( (match-beginning 7)
          (add-text-properties (match-beginning 9) (match-end 9)
                               (list 'in-string t)))))
+
     (when (>= end-point start-point)
-      (remove-text-properties start-point
-                              end-point
-                              `(font-lock-multiline in-comment in-string)))
+      (remove-text-properties start-point end-point
+                              (list 'font-lock-multiline nil
+                                    'in-comment nil
+                                    'in-string nil)))
     matched))
 
 ;;}}}
