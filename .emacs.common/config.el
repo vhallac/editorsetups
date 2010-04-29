@@ -81,6 +81,8 @@
 ; No longer needed. c-subword-mode handles things just fine
 ; (try-progn "Cannot load the CamelCase extension package"
 ;           (require 'camelCase "camelCase-mode.el"))
+(try-progn "Cannot set up the color theme"
+           (load "~/.emacs.common/color-theme_init.el"))
 
 (try-progn "Cannot load misc setup functions"
            (load "~/.emacs.common/misc_funcs.el"))
