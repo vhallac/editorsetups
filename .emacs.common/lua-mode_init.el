@@ -9,4 +9,5 @@
   (setq lua-electric-mode nil) ; Can't indent properly. At stay out of the way.
   (choose-indent-type)
   (setq lua-indent-level 4)
+  (choose-indent-type)
   (vtidy-mode 't)))
